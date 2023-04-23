@@ -253,6 +253,7 @@ const cardsOnDOM = (array) => {
       <div class="card-body">
       <p class="card-text">${pet.name}</p>
       <p class="card-text">${pet.type}</p>
+      <button class="btn btn-danger" id="delete--${pet.id}">Delete</button>
       </div>
       </div>`;
     }
@@ -276,24 +277,62 @@ const filter = (array, typeString) => {
 
 const showAllButton= document.querySelector("#show-btn");
 const showDogButton = document.querySelector("#dog");
-const showCatsButton = document.querySelector("#cat");
-const showDinoButton = document.querySelector("#dino");
+const showCatButton = document.querySelector("#cat");
+const showDinosButton = document.querySelector("#dino");
 
 showAllButton.addEventListener('click', () => {
   cardsOnDOM(pets);
 });
 
-showDogButton.addEventListener(`click`, () => {
+showDogButton.addEventListener('click', () => {
   const dogAnimalType = filter(pets, `dog`);
   cardsOnDOM(dogAnimalType);
 });
 
-showCatButton.addEventListener(`click`, () => {
+showCatButton.addEventListener('click', () => {
   const catAnimalType = filter(pets, `cat`);
   cardsOnDOM(catAnimalType);
 });
 
-showDinoButton.addEventListener(`click`, () => {
+showDinosButton.addEventListener(`click`, () => {
   const dinosAnimalType = filter(pets, `dino`);
-  cardsOnDOM(dinoAnimalType);
+  cardsOnDOM(dinosAnimalType);
 });
+const form = document.querySelector('form');
+
+const createPet = (e) => {
+  e.preventDefault(); 
+
+const newPetObj = {
+  id: pets.length + 1,
+  name: document.querySelector("#name").value,
+  color: document.querySelector("#color").value,
+  specialSkill: document.querySelector("#specialSkill").value,
+  type: document.querySelector("#type").value,
+  image: document.querySelector("#image").value,
+};
+
+pets.push(newPetObj);
+cardsOnDOM(pets);
+form.reset();
+}
+
+form.addEventListener('submit', createPet);
+
+const app = document.querySelector("#app");
+
+app.addEventListener('click', (e) => {
+  if (e.target.id.includes("delete")) {
+    const [, id] = e.target.id.split("--");
+    const index = pets.findIndex(e => e.id === Number(id));
+    console.log(index);
+    pets.splice(index, 1);
+    cardsOnDOM(pets);
+  }
+});
+
+const startApp =() => {
+  cardsOnDOM(pets);
+}
+
+startApp();
